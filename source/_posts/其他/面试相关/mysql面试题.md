@@ -156,8 +156,13 @@ EXPLAIN select * from emp where  deptno='287' and empno = '100002' and ename='It
 ### like以通配符%开头索引失效
 
 ```mysql
-EXPLAIN select * from emp where ename like '%e%'
+EXPLAIN select * from emp where ename like '%e'
 ```
+
+LIKE查询以%开头使用了索引的原因就是使用了索引覆盖。
+针对二级索引MySQL提供了一个[**优化**](https://www.bmabk.com/index.php/post/tag/77)技术。即从辅助索引中就可以得到查询的记录，就不需要回表再根据聚集索引查询一次完整记录。使用索引覆盖的一个好处是辅助索引不包含整行记录的所有信息，故其大小要远小于聚集索引，因此可以减少大量的IO操作，但是前提是要查询的所有列必须都加了索引。
+
+LIKE查询以%开头会导致全索引扫描或者全表扫描，如果没有索引覆盖的话，查询到的数据会回表，多了一次IO操作，当MySQL预估全表扫描或全索引扫描的时间比走索引花费的时间更少时，就不会走索引。有了索引覆盖就不需要回表了，减少了IO操作，花费的时间更少，所以就使用了索引。
 
 ### OR 前后存在非索引的列，索引失效
 
