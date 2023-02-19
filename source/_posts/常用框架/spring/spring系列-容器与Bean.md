@@ -24,11 +24,20 @@ cover: https://gitee.com/studentgitee/note-picture/raw/master/f9a0132ef7bd81b06d
 
 ## 什么是BeanFactory?
 
-它是`ApplicationContext`的父接口
+<img src="https://gitee.com/studentgitee/note-picture/raw/master/image-20230219160002802.png"/>
 
-它才是 `Spring` 的核心容器，主要的 `ApplicationContext` 实现都 [组合]了他的功能
+> 它是`ApplicationContext`的父接口
+>
+> 它才是 `Spring` 的核心容器，主要的 `ApplicationContext` 实现都 [组合]了他的功能，【组合】是指 ApplicationContext 的一个重要成员变量就是 BeanFactory
 
 ## BeanFactory能做什么？
+
+> BeanFactory的定义(选中BeanFactory后按住Ctrl+F12可以查看类里面的所有方法)
+
+![image-20230219115854082](https://gitee.com/studentgitee/note-picture/raw/master/image-20230219115854082.png)
+
+> - 表面上只有 getBean
+> - 实际上控制反转、基本的依赖注入、直至 Bean 的生命周期的各种功能，都由它的实现类提供
 
 ## ApplicationContext的功能
 
@@ -44,6 +53,17 @@ ApplicationContext在BeanFactory基础上对功能进行了扩展，例如：监
 3、Bean的初始化时机不同，原始BeanFactory是在首次调用getBean时才进行Bean的创建，而ApplicationContext则是配置文件加载，容器一创建就将Bean都实例化并初始化好
 
 # 容器实现
+
+* DefaultListableBeanFactory，是 BeanFactory 最重要的实现，像**控制反转**和**依赖注入**功能，都是它来实现
+* ClassPathXmlApplicationContext，从类路径查找 XML 配置文件，创建容器（旧）
+* FileSystemXmlApplicationContext，从磁盘路径查找 XML 配置文件，创建容器（旧）
+* XmlWebApplicationContext，传统 SSM 整合时，基于 XML 配置文件的容器（旧）
+* AnnotationConfigWebApplicationContext，传统 SSM 整合时，基于 java 配置类的容器（旧）
+* AnnotationConfigApplicationContext，Spring boot 中非 web 环境容器（新）
+* AnnotationConfigServletWebServerApplicationContext，Spring boot 中 servlet web 环境容器（新）
+* AnnotationConfigReactiveWebServerApplicationContext，Spring boot 中 reactive web 环境容器（新）
+
+另外要注意的是，后面这些带有 ApplicationContext 的类都是 ApplicationContext 接口的实现，但它们是**组合**了 DefaultListableBeanFactory 的功能，并非继承而来
 
 ## BeanFactory的实现
 
