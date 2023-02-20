@@ -2,7 +2,7 @@
 title: docker安装软件
 tags: 容器部署
 categories: 容器部署
-cover: https://gitee.com/studentgitee/note-picture/raw/master/6e1baf91e53fce11a3e242797e747424.webp
+cover: https://gitee.com/studentgitee/note-picture/raw/master/md0011.png
 ---
 ![image-20230210143018927](https://gitee.com/studentgitee/note-picture/raw/master/image-20230210143018927.png)
 

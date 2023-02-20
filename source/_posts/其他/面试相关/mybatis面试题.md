@@ -2,7 +2,7 @@
 title: mybatis面试题
 tags: 面试题
 categories: 面试题
-cover: https://gitee.com/studentgitee/note-picture/raw/master/115.jpg
+cover: https://gitee.com/studentgitee/note-picture/raw/master/md005.png
 ---
 ## #{}和${}的区别是什么？
 

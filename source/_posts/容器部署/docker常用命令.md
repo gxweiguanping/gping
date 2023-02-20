@@ -2,7 +2,7 @@
 title: docker常用命令
 tags: 容器部署
 categories: 容器部署
-cover: https://gitee.com/studentgitee/note-picture/raw/master/u=202403325,594744356&fm=253&fmt=auto&app=138&f=PNG.webp
+cover: https://gitee.com/studentgitee/note-picture/raw/master/xd0012.png
 ---
 ![image-20230210143018927](https://gitee.com/studentgitee/note-picture/raw/master/image-20230210143018927.png)
 

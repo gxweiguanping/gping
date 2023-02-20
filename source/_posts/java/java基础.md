@@ -3,7 +3,7 @@ title: java基础
 date: 2023-02-12 23:33:02
 tags: java
 categories: java
-cover: https://gitee.com/studentgitee/note-picture/raw/master/917121c7d8615458f6c6039069fc6255.png
+cover: https://gitee.com/studentgitee/note-picture/raw/master/xd008.png
 ---
 ![image-20230210143018927](https://gitee.com/studentgitee/note-picture/raw/master/image-20230210143018927.png)
 

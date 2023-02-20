@@ -2,7 +2,7 @@
 title: nginx常用命令
 tags: nginx
 categories: nginx
-cover: https://gitee.com/studentgitee/note-picture/raw/master/48540923dd54564e717962685c908285d1584f1d.jpg
+cover: https://gitee.com/studentgitee/note-picture/raw/master/md0023.png
 ---
 ![image-20230210143018927](https://gitee.com/studentgitee/note-picture/raw/master/image-20230210143018927.png)
 

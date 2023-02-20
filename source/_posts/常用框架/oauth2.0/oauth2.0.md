@@ -2,7 +2,7 @@
 title: oauth2.0
 tags: 常用框架
 categories: [常用框架,auth2.0]
-cover: https://gitee.com/studentgitee/note-picture/raw/master/9e803ed883298d09d964bbaf9d89b9dc.jpg
+cover: https://gitee.com/studentgitee/note-picture/raw/master/xd24.png
 ---
 ![image-20230210143018927](https://gitee.com/studentgitee/note-picture/raw/master/image-20230210143018927.png)
 

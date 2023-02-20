@@ -3,7 +3,7 @@ title: springcloud
 date: 2023-02-12 23:33:02
 tags: 微服务
 categories: 微服务
-cover: https://gitee.com/studentgitee/note-picture/raw/master/u=4096551373,629120265&fm=253&fmt=auto&app=138&f=JPEG.webp
+cover: https://gitee.com/studentgitee/note-picture/raw/master/md0024.png
 ---
 ![image-20230210143018927](https://gitee.com/studentgitee/note-picture/raw/master/image-20230210143018927.png)
 

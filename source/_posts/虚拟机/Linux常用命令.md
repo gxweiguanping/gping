@@ -2,7 +2,7 @@
 title: Linux常用命令
 tags: 虚拟机
 categories: 虚拟机
-cover: https://gitee.com/studentgitee/note-picture/raw/master/147937407959735466.png
+cover: https://gitee.com/studentgitee/note-picture/raw/master/xd21.png
 ---
 ![image-20230210143018927](https://gitee.com/studentgitee/note-picture/raw/master/image-20230210143018927.png)
 

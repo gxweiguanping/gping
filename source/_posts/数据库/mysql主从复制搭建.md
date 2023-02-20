@@ -2,7 +2,7 @@
 title: mysql主从赋值搭建
 tags: 数据库
 categories: 数据库
-cover: https://gitee.com/studentgitee/note-picture/raw/master/v2-3286aaa6155b7e419c002b536332c519_250x0.jpg
+cover: https://gitee.com/studentgitee/note-picture/raw/master/xd009.png
 ---
 ![image-20230210143018927](https://gitee.com/studentgitee/note-picture/raw/master/image-20230210143018927.png)
 

@@ -2,9 +2,8 @@
 title: Elasticsearch教程
 tags: 常用框架
 categories: [常用框架, elasticSearch]
-cover: https://gitee.com/studentgitee/note-picture/raw/master/c38cf6948b39dd755ac13fc639070fd8af5cd4db.png
+cover: https://gitee.com/studentgitee/note-picture/raw/master/md003.png
 ---
-
 ![image-20230210143018927](https://gitee.com/studentgitee/note-picture/raw/master/image-20230210143018927.png)
 
 # Elasticsearch教程(一)
@@ -98,6 +97,20 @@ cover: https://gitee.com/studentgitee/note-picture/raw/master/c38cf6948b39dd755a
 
 ![image-20230215154235736](https://gitee.com/studentgitee/note-picture/raw/master/image-20230215154235736.png)
 
+#### 工作原理
+
+> Logstash 有两个必要元素：`input` 和 `output` ，一个可选元素：`filter`。
+>
+> 这三个元素，分别代表 Logstash 事件处理的三个阶段：输入 > 过滤器 > 输出。
+
+![basic_logstash_pipeline](https://gitee.com/studentgitee/note-picture/raw/master/basic_logstash_pipeline.png)
+
+- input 负责从数据源采集数据。
+- filter 将数据修改为你指定的格式或内容。
+- output 将数据传输到目的地。
+
+> 在实际应用场景中，通常输入、输出、过滤器不止一个。Logstash 的这三个元素都使用插件式管理方式，用户可以根据应用需要，灵活的选用各阶段需要的插件，并组合使用。
+
 #### logstash导入数据
 
 > 虽然 kibana 提供了一些数据集供我们使用，为了加深对 logstash 的理解，我们 movielens的电影数据集。
@@ -174,9 +187,12 @@ stdout {}
 ### 索引Index
 
 > Elasticsearch中的索引有多层的意思：
-> a. 某一类文档的集合就构成了一个索引，类比到数据库就是一个数据库(或者数据库表);
-> b.它还描述了一个动作，就是将某个文档保存在elasticsearch的过程也叫索引;
-> c. 倒排索引。
+>
+> a、某一类文档的集合就构成了一个索引，类比到数据库就是一个数据库(或者数据库表)
+>
+> b、它还描述了一个动作，就是将某个文档保存在elasticsearch的过程也叫索引
+>
+> c、倒排索引
 
 ### 文档Document
 
@@ -310,15 +326,21 @@ GET _analyze
 
 > analysis(只是一个概念)，文本分析是将全文本转换为一系列单词的过程，也叫分词。analysis是通过analyzer(分词器)来实现的，可以使用Elasticsearch内置的分词器，也可以自己去定制一些分词器。 除了在数据写入的时候进行分词处理，那么在查询的时候也可以使用分析器对查询语句进行分词。
 >
-> anaylzer是由三部分组成，例如有 Hello a World, the world is beautifu
+> anaylzer是由三部分组成
 >
-> 2. Character Filter: 将文本中html标签剔除掉。
-> 2. Tokenizer: 按照规则进行分词，在英文中按照空格分词。
-> 3. Token Filter: 去掉stop world(停顿词，a, an, the, is, are等)，然后转换小写
+> 1、例如有 Hello a World, the world is beautifu
+>
+> 2、Character Filter: 将文本中html标签剔除掉
+>
+> 3、Tokenizer: 按照规则进行分词，在英文中按照空格分词
+>
+> 4、Token Filter: 去掉stop world(停顿词，a, an, the, is, are等)，然后转换小写
 
 ![image-20230215155046204](https://gitee.com/studentgitee/note-picture/raw/master/image-20230215155046204.png)
 
 ### 内置分词器
+
+> Elasticsearch 中内置了一些分词器，这些分词器只能对英文进行分词处理，无法将中文的词识别出来。
 
 |     分词器名称      |               处理过程               |
 | :-----------------: | :----------------------------------: |
@@ -334,6 +356,8 @@ GET _analyze
 
 #### Standard Analyzer
 
+> 标准分词器，是Elasticsearch中默认的分词器，可以拆分英文单词，大写字母统一转换成小写。
+
 ```java
 GET _analyze
 {
@@ -343,6 +367,8 @@ GET _analyze
 ```
 
 #### Simple Analyze
+
+> 按非字母的字符分词，例如：数字、标点符号、特殊字符等，会去掉非字母的词，大写字母统一转换成小写。
 
 ```JAVA
 GET _analyze
@@ -354,6 +380,8 @@ GET _analyze
 
 #### Stop Analyzer
 
+> 会去掉无意义的词，例如：the、a、an 等，大写字母统一转换成小写。
+
 ```JAVA
 GET _analyze
 {
@@ -363,6 +391,8 @@ GET _analyze
 ```
 
 #### Whitespace Analyzer
+
+> 简单按照空格进行分词，相当于按照空格split了一下，大写字母不会转换成小写。
 
 ```JAVA
 GET _analyze
@@ -374,6 +404,8 @@ GET _analyze
 
 #### Keyword Analyzer
 
+> 不拆分，整个文本当作一个词
+
 ```java
 GET _analyze
 {
@@ -384,6 +416,8 @@ GET _analyze
 
 #### Pattern Analyzer
 
+> 正则表达式，默认是\W+(非字符串分隔)
+
 ```java
 GET _analyze
 {
@@ -392,38 +426,199 @@ GET _analyze
 }
 ```
 
-### 扩展分词器
+### ik分词器
 
-#### ik分词器
-
-**下载**
+#### **下载**
 
 > 下载地址：https://github.com/medcl/elasticsearch-analysis-ik/releases
 
-**安装**
+#### **安装**
 
 > IK分词器在任何操作系统下安装步骤均一样: 在ES的home目录下的 plugins 目录下创建名为 ik 的文件夹，然后将下载后的 zip 包拷贝到 ik 解压即可
 
 > K分词器提供了两种分词方式：
 
-| 分词器器名称 |                             说明                             |
-| :----------: | :----------------------------------------------------------: |
-|   ik_smart   | 会做最粗粒度的拆分，比如会将“中华人民共和国歌”拆分为“中华人民共和国,国歌”，适合 Phrase 查询 |
-| ik_max_word  | 会将文本做最细粒度的拆分，比如会将“中华⼈人⺠民共和国国歌”拆分为“中华⼈人⺠民共和国,中华⼈人⺠民,中华,华人,人⺠民共和国,人⺠民,人,民,共和国,共和,和,国国,国歌”，会穷尽各种可能的组合，适合 Term Query； |
+| 分词器名称  |                             说明                             |
+| :---------: | :----------------------------------------------------------: |
+|  ik_smart   | 会做最粗粒度的拆分，比如会将**中华人民共和国歌**拆分为**中华人民共和国**,**歌**，适合 Phrase 查询 |
+| ik_max_word | 会将文本做最细粒度的拆分，比如会将**中华⼈人⺠民共和国国歌**拆分为**中华⼈人⺠民共和国**,**中华人民**,**中华**,**华人**,**人民共和国**,**人民**,**人**,民,**共和国**,**共和**,**和**,**国**,**国歌**”，会穷尽各种可能的组合，适合 Term Query； |
 
-**自定义词库**
+**ik_smart**
 
-> 在很多的时候，业务上的⼀一些词库极有可能不在IK分词器器的词库中，需要去定制属于我们自己的词库。例如下面的例子中， 中国人民 、 up主 被切分为一个个的字，我们希望这两个词语是不被拆分；另外 作为中文的停顿词，也不希望出现在分词中，所以我们需要自定义词库和停顿词库。
+```es
+GET _analyze
+{
+ "analyzer": "ik_smart",
+ "text": "中华人民共和国歌"
+}
+```
 
-#### pinyin分词器
+**结果**
 
-**下载**
+```es
+{
+  "tokens" : [
+    {
+      "token" : "中华人民共和国",
+      "start_offset" : 0,
+      "end_offset" : 7,
+      "type" : "CN_WORD",
+      "position" : 0
+    },
+    {
+      "token" : "歌",
+      "start_offset" : 7,
+      "end_offset" : 8,
+      "type" : "CN_CHAR",
+      "position" : 1
+    }
+  ]
+}
+```
+
+**ik_max_word**  
+
+```es
+GET _analyze
+{
+ "analyzer": "ik_max_word",
+ "text": "中华人民共和国歌"
+}
+```
+
+**结果**
+
+```es
+{
+  "tokens" : [
+    {
+      "token" : "中华人民共和国",
+      "start_offset" : 0,
+      "end_offset" : 7,
+      "type" : "CN_WORD",
+      "position" : 0
+    },
+    {
+      "token" : "中华人民",
+      "start_offset" : 0,
+      "end_offset" : 4,
+      "type" : "CN_WORD",
+      "position" : 1
+    },
+    {
+      "token" : "中华",
+      "start_offset" : 0,
+      "end_offset" : 2,
+      "type" : "CN_WORD",
+      "position" : 2
+    },
+    {
+      "token" : "华人",
+      "start_offset" : 1,
+      "end_offset" : 3,
+      "type" : "CN_WORD",
+      "position" : 3
+    },
+    {
+      "token" : "人民共和国",
+      "start_offset" : 2,
+      "end_offset" : 7,
+      "type" : "CN_WORD",
+      "position" : 4
+    },
+    {
+      "token" : "人民",
+      "start_offset" : 2,
+      "end_offset" : 4,
+      "type" : "CN_WORD",
+      "position" : 5
+    },
+    {
+      "token" : "共和国",
+      "start_offset" : 4,
+      "end_offset" : 7,
+      "type" : "CN_WORD",
+      "position" : 6
+    },
+    {
+      "token" : "共和",
+      "start_offset" : 4,
+      "end_offset" : 6,
+      "type" : "CN_WORD",
+      "position" : 7
+    },
+    {
+      "token" : "国歌",
+      "start_offset" : 6,
+      "end_offset" : 8,
+      "type" : "CN_WORD",
+      "position" : 8
+    }
+  ]
+}
+```
+
+#### **自定义动态词库**
+
+> 在很多的时候，业务上的一些词库极有可能不在IK分词器的词库中，需要去定制属于我们自己的词库。例如下面的例子中， 中
+>
+> 国人民 、 up主 被切分为一个个的字，我们希望这两个词语是不被拆分；另外 作为中文的停顿词，也不希望出现在分词中，所
+>
+> 以我们需要自定义词库和停顿词库。
+
+
+
+### pinyin分词器
+
+#### **下载**
 
 > 下载地址: https://github.com/medcl/elasticsearch-analysis-pinyin/releases
 
-**安装**
+#### **安装**
 
-> pinyin 分词器器在任何操作系统下安装步骤均⼀一样: 在ES的家目录下的 plugins 目录下创建名为pinyin 的⽂文件夹，然后将下载后的 zip 包拷⻉贝到 pinyin 解压即可
+> pinyin 分词器在任何操作系统下安装步骤均一样: 在ES的家目录下的 plugins 目录下创建名为pinyin 的文件夹，然后将下载后的 zip 包拷贝到 pinyin 解压即可
+>
+
+### ik分词器+pinyin分词器组合使用
+
+> 同时支持ik中文分词和pinyin分词
+
+```es
+PUT /custom_analyzer
+{
+   "settings": {
+        "analysis": {
+            "analyzer": {
+                "ik_smart_pinyin": {
+                    "type": "custom",
+                    "tokenizer": "ik_smart",
+                    "filter": ["my_pinyin"]
+                },
+                "ik_max_word_pinyin": {
+                    "type": "custom",
+                    "tokenizer": "ik_max_word",
+                    "filter": ["my_pinyin"]
+                }
+            },
+            "filter": {
+                "my_pinyin": {
+                    "type" : "pinyin",
+                    "keep_separate_first_letter" : true,
+                    "keep_full_pinyin" : true,
+                    "keep_original" : true,
+                    "limit_first_letter_length" : 16,
+                    "lowercase" : true,
+                    "remove_duplicated_term" : true
+                }
+            }
+        }
+  }
+}
+```
+
+> 重新指定文档类型映射拼音分词类型
+
+
 
 # Elasticsearch教程(二)
 
@@ -436,6 +631,14 @@ GET _analyze
 > term查询的种类有：Term Query、Range Query等。
 >
 > 在ES中，Term查询不会对输入进行分词处理，将输入作为一个整体，在倒排索引中查找准确的词项。我们也可以使用Constant Score 将查询转换为一个filter，避免算分，利用缓存，提高查询的效率。
+
+**注意的地方**
+
+- 避免是对`text`属性的字段使用`Term query`查询
+
+- `Elasticsearch`会因为分词器的原因改变字段的值，所以如果想要精确匹配`text`类型的字段将会很难
+- 如果查询`text`类型的字段，建议使用`Match query`
+- 使用term时对应的字段的类型type=keyword，这样就不会有大小写转换的问题
 
 #### term与terms
 
@@ -461,6 +664,7 @@ GET movies/_search
 { 
 	"query": {  
 		"terms": {   
+            #[ ] 多个是或者的关系
 			"title": ["beautiful","mind"] 
 		}
 	}
@@ -513,8 +717,7 @@ GET movies/_search
 
 > 全文查询的种类有: Match Query、Match Phrase Query、Query String Query等
 >
-> 索引和搜索的时候都会进行分词，在查询的时候，会对输入进行分词，然后每个词项会逐个到底层进行
-> 查询，将最终的结果进行合并
+> 索引和搜索的时候都会进行分词，在查询的时候，会对输入进行分词，然后每个词项会逐个到底层进行查询，将最终的结果进行合并
 
 #### match
 
@@ -549,6 +752,38 @@ GET movies/_search
 
 #### match_phrase
 
+> 称为短语搜索，要求所有的分词必须同时出现在文档中，同时位置必须紧邻一致。
+
+**match_phrase的使用场景**
+
+> 现假设有两个句子
+
+１、java is my favourite programming language, and I also think spark is a very good big data system.
+
+２、java spark are very related, because scala is spark's programming language and scala is also based on jvm like java.
+
+进行match query，query语法如下：
+
+```
+{
+  "query": {
+    "match": {
+      "content": "java spark"
+    }
+  }
+}
+```
+
+> match query进行搜索，只能搜索到包含java或spark的document，包含java和spark的doc都会被返回回来。现在假如说我们要实现以下三个需求：
+
+1、java spark，就靠在一起，中间不能插入任何其他字符，就要搜索出来这种doc
+
+2、java spark，但是要求，java和spark两个单词靠的越近，doc的分数越高，排名越靠前
+
+3、我们搜索时，文档中必须包含java spark这两个文档，且他们之间的距离不能超过５
+
+> 要实现上述三个需求，用match做全文检索，是搞不定的，必须得用proximity match（近似匹配），proximity match分两种，短语匹配（phrase match）和近似匹配（proximity match）。phrase match，就是仅仅搜索出java和spark靠在一起的那些doc，比如有个doc，是java use'd spark，这就不是结果。
+
 > 查询电影名字中包含有 "beautiful mind" 这个短语的所有的数据
 
 ```java
@@ -564,6 +799,19 @@ GET movies/_search
 
 #### multi_match
 
+> 多个字段同时进行全文匹配
+
+`multi_match`查询在内部执行的方式取决于`type`参数，可以将其设置为：
+
+|      **参数**       |                           **描述**                           |
+| :-----------------: | :----------------------------------------------------------: |
+| best_fields（默认） |     查找匹配任何字段的文档，但使用来自最佳字段的`_score`     |
+|     most_fields     |       查找匹配任何字段的文档，并结合每个字段的`_score`       |
+|    cross_fields     | 使用同一个`analyzer`处理字段，就像它们是一个大字段一样。查找任何字段中的每个单词 |
+|       phrase        | 在每个字段上运行`match_phrase`查询，并使用来自最佳字段的`_score` |
+|    phrase_prefix    | 在每个字段上运行`match_phrase_prefix`查询，并使用来自最佳字段的`_score` |
+|     bool_prefix     | 在每个字段上创建一个`match_bool_prefix`查询，并组合每个字段的`_score` |
+
 > 查询 title 或 genre 中包含有 beautiful 或者 Adventure 的所有的数据
 
 ```java
@@ -572,7 +820,7 @@ GET movies/_search
 	"query": {  
 		"multi_match": {   
 			"query": "beautiful Adventure",
-			   "fields": ["title", "genre"] 
+			"fields": ["title", "genre"] 
 		}
 	}
 }
@@ -624,11 +872,11 @@ GET movies/_search
 #### simple_query_string
 
 > simple_query_string 覆盖了很多其他查询的用法。
+>
 > 查询 title 中包含有 beautiful 和 mind 的所有的电影
 
 ```java
 GET movies/_search          
-
 ```
 
 ```java
@@ -657,8 +905,7 @@ GET movies/_search
 }
 ```
 
-> 查询title或genre中包含有 beautiful mind romance 这个三个单词的所有的电影 （与
-> multi_match类似）
+> 查询title或genre中包含有 beautiful mind romance 这个三个单词的所有的电影 （与multi_match类似）
 
 ```java
 GET movies/_search
@@ -726,8 +973,8 @@ GET movies/_search
 		"fuzzy": {   
 			"title": {    
 				"value": "neverendign",
-				    "fuzziness": 1,
-				    "prefix_length": 5  
+				"fuzziness": 1,
+				"prefix_length": 5  
 			} 
 		}
 	}
@@ -746,7 +993,7 @@ GET movies/_search
 			"must": [   {     
 				"simple_query_string": {      
 					"query": "beautiful mind",
-					      "fields": ["title"]    
+					"fields": ["title"]    
 				}   
 			},     {     
 				"range": {      
@@ -761,8 +1008,7 @@ GET movies/_search
 }
 ```
 
-> 查询 title 中包含有 beautiful 这个单词，并且上映年份在2016~2018年间的所有电影，但是不
-> 进行相关性的算分
+> 查询 title 中包含有 beautiful 这个单词，并且上映年份在2016~2018年间的所有电影，但是不进行相关性的算分
 
 ```java
 # filter不会进行相关性的算分，并且会将查出来的结果进行缓存，效率上比 query 高
@@ -789,6 +1035,8 @@ GET movies/_search
 
 ### 分页查询
 
+> es的from默认是从0开始的
+
 ```es
 {
 	"query":{
@@ -811,12 +1059,37 @@ GET movies/_search
 
 ### 数据类型
 
-|       类型名       |                             描述                             |
-| :----------------: | :----------------------------------------------------------: |
-|    Text/Keyword    | 字符串， Keyword的意思是字符串的内容不会被分词处理，输入是什么内容，存<br/>储在ES中就是什么内容。Text类型ES会自动的添加一个Keyword类型的子字段 |
-|        Date        |                           日期类型                           |
-| Integer/Float/Long |                           数值类型                           |
-|                    |                                                              |
+#### 基础类型
+
+|                            类型名                            |                             描述                             |
+| :----------------------------------------------------------: | :----------------------------------------------------------: |
+|                         Text/Keyword                         | 字符串， Keyword的意思是字符串的内容不会被分词处理，输入是什么内容，存储在ES中就是什么内容。Text类型ES会自动的添加一个Keyword类型的子字段 |
+|                             Date                             |                           日期类型                           |
+| long、integer、short、byte、double、float、half_float、scaled_float |                           数值类型                           |
+|                           boolean                            |                           布尔类型                           |
+|                            binary                            |                          二进制类型                          |
+|                            range                             |                           范围类型                           |
+
+#### 复杂类型
+
+| 类型名 |   描述   |
+| :----: | :------: |
+| array  | 数组类型 |
+| object | 对象类型 |
+| nested | 嵌套类型 |
+|        |          |
+
+#### 特殊类型
+
+|   类型名    |     描述     |
+| :---------: | :----------: |
+|  geo_point  |   地理类型   |
+|  geo_shape  | 地理图形类型 |
+|     ip      |   IP 类型    |
+| completion  |   范围类型   |
+| token_count | 令牌计数类型 |
+| attachment  |   附件类型   |
+| percolator  |   抽取类型   |
 
 ### Mapping的定义
 
@@ -831,15 +1104,87 @@ PUT users
 }
 ```
 
+```es
+PUT fault_knowledge_base
+{
+  "mappings": {
+    "properties": {
+      "id": {
+        "type": "keyword"
+      },
+      "knowledge_base_type_code": {
+        "type": "keyword"
+      },
+      "device_type_code": {
+        "type": "keyword"
+      },
+      "material_code": {
+        "type": "keyword"
+      },
+      "fault_codes": {
+        "type": "keyword",
+        "index": false
+      },
+      "fault_phenomenon": {
+        "type": "text",
+        "analyzer": "ik_max_word",
+        "fields": {
+          "suggest": {
+            "type": "completion",
+            "analyzer": "ik_max_word"
+          }
+        }
+      },
+      "fault_reason": {
+        "type": "text",
+        "analyzer": "ik_max_word",
+        "fields": {
+          "suggest": {
+            "type": "completion",
+            "analyzer": "ik_max_word"
+          }
+        }
+      },
+      "solution": {
+        "type": "text",
+        "analyzer": "ik_max_word"
+      },
+      "method": {
+        "type": "text",
+        "analyzer": "ik_max_word"
+      },
+      "tools": {
+        "type": "text"
+      },
+      "status": {
+        "type": "integer"
+      },
+      "file_path": {
+        "type": "integer",
+        "index": false
+      },
+      "create_time": {
+        "type": "date",
+        "index": false
+      }
+    }
+  }
+}
+```
+
+
+
 ### 常见参数
 
 #### index
 
 > 可以给属性添加一个 布尔类型的index属性，标识该属性是否能被倒排索引，也就是说是否能通过该字段进行搜索。
+>
+> 可选值为 **true/false**，默认为 **true**
 
 #### null_value
 
-> 在数据索引进ES的时候，当某些数据为 null 的时候，该数据是不能被搜索的，可以使用null_value 属性指定一个值，当属性的值为 null 的时候，转换为一个通过 null_value 指定的值。 null_value属性只能用于Keyword类型的属性
+> 在数据索引进ES的时候，当某些数据为 null 的时候，该数据是不能被搜索的，可以使用null_value 属性指定一个值，当属性的值为 null 的时候，转换为一个通过 null_value 指定的值。 **null_value属性只能用于Keyword类型的属性**
 
 #### analyzer
 
@@ -881,7 +1226,7 @@ PUT index_name
 }
 ```
 
-## 三.复杂查询
+## 三. 复杂查询
 
 ### 聚合查询
 

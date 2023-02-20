@@ -2,7 +2,7 @@
 title: git使用手册
 tags: 常用工具
 categories: 常用工具
-cover: https://gitee.com/studentgitee/note-picture/raw/master/u=829309475,2841958997&fm=253&fmt=auto&app=138&f=JPG.webp
+cover: https://gitee.com/studentgitee/note-picture/raw/master/xd16.png
 ---
 ![image-20230210143018927](https://gitee.com/studentgitee/note-picture/raw/master/image-20230210143018927.png)
 

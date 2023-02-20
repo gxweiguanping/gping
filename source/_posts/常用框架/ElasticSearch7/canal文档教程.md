@@ -2,7 +2,7 @@
 title: canal文档教程
 tags: 常用框架
 categories: 常用框架
-cover: https://gitee.com/studentgitee/note-picture/raw/master/da3d27d44a89ca3da5f327445652b60c.jpg
+cover: https://gitee.com/studentgitee/note-picture/raw/master/md007.png
 ---
 ![image-20230210143018927](https://gitee.com/studentgitee/note-picture/raw/master/image-20230210143018927.png)
 
@@ -47,6 +47,10 @@ binlog_format=ROW
 ```
 
 **登录mysql查看是否开启成功**
+
+```java
+SHOW variables like '%log_bin%'
+```
 
 ![image-20230210202152999](https://gitee.com/studentgitee/note-picture/raw/master/image-20230210202152999.png)
 

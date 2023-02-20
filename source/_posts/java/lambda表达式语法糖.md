@@ -2,7 +2,7 @@
 title: lambda表达式语法糖
 tags: java
 categories: java
-cover: https://gitee.com/studentgitee/note-picture/raw/master/b8014a90f603738d4a50b23f67037457f819ecb1.jpg
+cover: https://gitee.com/studentgitee/note-picture/raw/master/xd007.png
 ---
 ![image-20230210143018927](https://gitee.com/studentgitee/note-picture/raw/master/image-20230210143018927.png)
 

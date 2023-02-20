@@ -2,7 +2,7 @@
 title: java基础面试题
 tags: 面试题
 categories: 面试题
-cover: https://gitee.com/studentgitee/note-picture/raw/master/115.jpg
+cover: https://gitee.com/studentgitee/note-picture/raw/master/md006.png
 ---
 ## Java有几种基本数据类型
 

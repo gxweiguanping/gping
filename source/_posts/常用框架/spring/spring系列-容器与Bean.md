@@ -2,7 +2,7 @@
 title: spring系列容器与Bean
 tags: 常用框架
 categories: 常用框架
-cover: https://gitee.com/studentgitee/note-picture/raw/master/f9a0132ef7bd81b06d86d07b6879f13d.jpg
+cover: https://gitee.com/studentgitee/note-picture/raw/master/md0010.png
 ---
 ![image-20230210143018927](https://gitee.com/studentgitee/note-picture/raw/master/image-20230210143018927.png)
 

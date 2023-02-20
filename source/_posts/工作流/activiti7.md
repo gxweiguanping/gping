@@ -2,7 +2,7 @@
 title: activiti7
 tags: 工作流
 categories: 工作流
-cover: https://gitee.com/studentgitee/note-picture/raw/master/333279e0-4f65-4620-9697-39c6bedf4356_20160605.jpg
+cover: https://gitee.com/studentgitee/note-picture/raw/master/md0013.png
 ---
 ![image-20230210143018927](https://gitee.com/studentgitee/note-picture/raw/master/image-20230210143018927.png)
 
@@ -13,8 +13,6 @@ cover: https://gitee.com/studentgitee/note-picture/raw/master/333279e0-4f65-4620
 1. Activiti基础篇
 2. Activiti进阶篇
 3. Activiti整合篇
-
-
 
 # 一、Activiti基础篇
 
