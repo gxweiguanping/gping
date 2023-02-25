@@ -2,8 +2,10 @@
 title: java基础面试题
 tags: 面试题
 categories: 面试题
-cover: https://gitee.com/studentgitee/note-picture/raw/master/md006.png
+cover: https://gitee.com/studentgitee/note-picture/raw/master/115.jpg
 ---
+# Java基础
+
 ## Java有几种基本数据类型
 
 > 有八种基本数据类型。一个字节等于8个bit位
@@ -164,6 +166,12 @@ public boolean equals(Object anObject) {
 }
 ```
 
+## String s = "hello"和String s = new String("hello");区别
+
+`String s = new String("hello");`可能创建两个对象也可能创建一个对象。如果常量池中有`hello`字符串常量的话，则仅仅在堆中创建一个对象。如果常量池中没有`hello`对象，则堆上和常量池都需要创建。
+
+`String s = "hello"`这样创建的对象，JVM会直接检查字符串常量池是否已有"hello"字符串对象，如没有，就分配一个内存存放"hello"，如有了，则直接将字符串常量池中的地址返回给栈。(没有new，没有堆的操作)
+
 ## String和StringBuffer和StringBuilder区别
 
  **数据可变和不可变**
@@ -266,405 +274,167 @@ public StringBuilder append(String str) {
 > - 5.子类代码块！
 > - 6.子类构造！
 
-## String s = "hello"和String s = new String("hello");区别
 
-`String s = new String("hello");`可能创建两个对象也可能创建一个对象。如果常量池中有`hello`字符串常量的话，则仅仅在堆中创建一个对象。如果常量池中没有`hello`对象，则堆上和常量池都需要创建。
-
-`String s = "hello"`这样创建的对象，JVM会直接检查字符串常量池是否已有"hello"字符串对象，如没有，就分配一个内存存放"hello"，如有了，则直接将字符串常量池中的地址返回给栈。(没有new，没有堆的操作)
 
 ## Java中的深拷贝和浅拷贝
 
 > 回答：深拷贝和浅拷贝都是对象拷贝
 
-`浅拷贝`：按位拷贝对象，它会创建一个新对象，这个对象有着原始对象属性值的一份精确贝。如果属性是基本类型，拷贝的就是基本类型的值；如果属性是内存地址（引用类型），拷贝的就是内存地址 ，因此如果其中一个对象改变了这个地址，就会影响到另一个对象。（浅拷贝仅仅复制所考虑的对象，而不复制它所引用的对象。）
+### 浅拷贝
 
-上图： 两个引用 `student1 `和` student2` 指向不同的两个对象，但是两个引用 `student1`  和`student2 `中的两个 teacher 引用指向的是同一个对象，所以说明是 `浅拷贝 `
+> 按位拷贝对象，它会创建一个新对象，这个对象有着原始对象属性值的一份精确贝。如果属性是**基本类型**，拷贝的就是基本类型的值；如果属性是内存地址（**引用类型**），拷贝的就是内存地址 ，因此如果其中一个对象改变了这个地址，就会影响到另一个对象。（浅拷贝仅仅复制所考虑的对象，而不复制它所引用的对象。）
 
-`深拷贝`：在拷贝引用类型成员变量时，为引用类型的数据成员另辟了一个独立的内存空间，实现真正内容上的拷贝。（深拷贝把要复制的对象所引用的对象都复制了一遍。）
+![image-20230222085508981](https://gitee.com/studentgitee/note-picture/raw/master/image-20230222085508981.png)
 
-上图：两个引用 `student1` 和 `student2` 指向不同的两个对象，两个引用 `student1` 和
-`student2 `中的两个 teacher 引用指向的是两个对象，但对 teacher 对象的修改只能影响
-student1 对象，所以说是 `深拷贝`
+### 深拷贝
 
-## Java中的异常体系
+> 在拷贝引用类型成员变量时，为引用类型的数据成员另辟了一个独立的内存空间，实现真正内容上的拷贝。（深拷贝把要复制的对象所引用的对象都复制了一遍。）
 
-Java中的异常主要分为Error和Exception。
+![image-20230222085449939](https://gitee.com/studentgitee/note-picture/raw/master/image-20230222085449939.png)
 
-![image-20230212115226826](https://gitee.com/studentgitee/note-picture/raw/master/image-20230212115226826.png)
+## Java的强引用、软引用、弱引用、虚引用
 
-> **Error** 指Java程序运行错误，如果程序在启动时出现Error，则启动失败；如果程序运行过程中出现Error，则系统将退出程序。出现Error是系统的内部错误或资源耗尽，Error不能在程序运行过程中被动态处理，一旦出现Error，系统能做的只有记录错误的原因和安全终止。
+> Java中提供这四种引用类型主要有两个目的：第一是可以让程序员通过代码的方式决定某些对象的生命周期；第二是有利于
+>
+> JVM进行垃圾回收。
 
-> Exception 指 Java程序运行异常，在运行中的程序发生了程序员不期望发生的事情，可以被Java异常处理机制处理。Exception也是程序开发中异常处理的核心，可分为RuntimeException（运行时异常）和CheckedException（检查异常）
+### 强引用
 
-1、`RuntimeException`（运行时异常）：指在Java虚拟机正常运行期间抛出的异常RuntimeException可以被捕获并处理，如果出现此情况，我们需要抛出异常或者捕获并处理异常。常见的有：`NullPointerException`（空指针错误）、`ClassCastException`（类型转换错误）、`ArrayIndexOutOfBoundsException`（数组越界错误）等;
-
-2、`CheckedException`（检查异常）：指在编译阶段Java编译器检查CheckedException异常，并强制程序捕获和处理此类异常，要求程序在可能出现异常的地方通过try catch语句块捕获异常并处理异常，如果不处理，则编译不通过。常见的有由于I/O错误导致的`IOException`、`SQLException`、`ClassNotFoundException`等。该类异常通常由于打开错误的文件、SQL语法错误、类不存等引起。
-
-### 追问1：异常的处理方式？
-
-回答：异常处理方式有抛出异常和使用try catch语句块捕获异常两种方式。
-
-1、抛出异常：遇到异常时不进行具体的处理，直接将异常抛给调用者，让调用者自己根据情况处理。抛出异常的三种形式：throws、throw和系统自动抛出异常。其中throws作用在方法上，用于定义方法可能抛出的异常；throw作用在方法内，表示明确抛出一个异常。
-
-2、使用try catch捕获并处理异常：使用try catch 捕获异常能够有针对性的处理每种可能出现的异常，并在捕获到异常后根据不同的情况做不同的处理。其使用过程比较简单：用try catch语句块将可能出现异常的代码抱起来即可。
-
-### 追问2： try-catch-finally 如何使用
-
-- `try`块 ： 用于捕获异常。其后可接零个或多个 `catch` 块，如果没有 `catch` 块，则必须跟一个 `finally` 块。
-- `catch`块 ： 用于处理 try 捕获到的异常。
-- `finally` 块 ： 无论是否捕获或处理异常，`finally` 块里的语句都会被执行。当在 `try` 块或 `catch` 块中遇到 `return` 语句时，`finally` 语句块将在方法返回之前被执行。
+> 我们使用的大部分引用实际上都是强引用，这是使用最普遍的引用。比如下面这段代码中的o是强引用
 
 ```java
-try {
-    System.out.println("Try to do something");
-    throw new RuntimeException("RuntimeException");
-} catch (Exception e) {
-    System.out.println("Catch Exception -> " + e.getMessage());
-} finally {
-    System.out.println("Finally");
+/**
+* 强引用
+*/  
+public static void strongReference(){
+        Object o = new Object();
+        System.out.println(o.toString());
+        System.gc();
+        System.out.println(o.toString());
+ }
+```
+
+如果一个对象具有强引用，那就类似于必不可少的物品，不会被垃圾回收器回收。**当内存空间不足，Java虚拟机宁愿抛出OutOfMemoryError错误，使程序异常终止，也不回收这种对象。**
+
+**演示**
+
+> 将堆内存空间调成5m   -Xms5m -Xmx5m -XX:+PrintGCDetails
+
+> 创建一个6m的byte数组
+
+```java
+/**
+* 强引用
+*/ 
+public static void strongReference(){
+        Object o = new Object();
+        System.out.println("strongReference before=====>"+o.toString());
+        try{
+            byte[] bytes = new byte[6 * 1024 * 1024];
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }finally {
+            System.out.println("strongReference after=====>"+o.toString());
+        }
 }
 ```
 
-**⚠️注意：不要在 finally 语句块中使用 return!** 当 try 语句和 finally 语句中都有 return 语句时，try 语句块中的 return 语句会被忽略。这是因为 try 语句中的 return 返回值会先被暂存在一个本地变量中，当执行到 finally 语句中的 return 之后，这个本地变量的值就变为了 finally 语句中的 return 返回值。
+![image-20230221224749475](https://gitee.com/studentgitee/note-picture/raw/master/image-20230221224749475.png)
 
-### 追问3：finally 中的代码一定会执行吗？
+**如果想中断强引用和某个对象之间的关联，可以显示地将引用赋值为null**，这样一来的话，JVM在合适的时间就会回收该对象。
 
-不一定的！在某些情况下，finally 中的代码不会被执行。
-
-就比如说 finally 之前虚拟机被终止运行的话，finally 中的代码就不会被执行。
+比如ArraryList类的clear方法中就是通过将引用赋值为null来实现清理工作的
 
 ```java
-try {
-    System.out.println("Try to do something");
-    throw new RuntimeException("RuntimeException");
-} catch (Exception e) {
-    System.out.println("Catch Exception -> " + e.getMessage());
-    // 终止当前正在运行的Java虚拟机
-    System.exit(1);
-} finally {
-    System.out.println("Finally");
+public void clear() {
+        modCount++;
+
+        // clear to let GC do its work
+        for (int i = 0; i < size; i++)
+            elementData[i] = null;
+
+        size = 0;
 }
 ```
 
-另外，在以下 2 种特殊情况下，`finally` 块的代码也不会被执行：
+### 软引用
 
-1. 程序所在的线程死亡。
-2. 关闭 CPU。
-
-## 什么是泛型？有什么作用？
-
-**Java 泛型（Generics）** 是 JDK 5 中引入的一个新特性。使用泛型参数，可以增强代码的可读性以及稳定性。
-
-编译器可以对泛型参数进行检测，并且通过泛型参数可以指定传入的对象类型。比如 `ArrayList<Persion> persons = new ArrayList<Persion>()` 这行代码就指明了该 `ArrayList` 对象只能传入 `Persion` 对象，如果传入其他类型的对象就会报错.
-
-### 追问1：泛型的使用方式有哪几种
-
-泛型一般有三种使用方式:**泛型类**、**泛型接口**、**泛型方法**。
-
-**1、泛型类**
+> 软引用是用来描述一些有用但并不是必需的对象，在Java中用`java.lang.ref.SoftReference`类来表示。对于软引用关联着的对象，只有在内存不足的时候JVM才会回收该对象，在内存足够的情况下，和强引用区别不大。因此，这一点可以很好地用来解决OOM的问题
 
 ```java
-//此处T可以随便写为任意标识，常见的如T、E、K、V等形式的参数常用于表示泛型
-//在实例化泛型类时，必须指定T的具体类型
-public class Generic<T>{
-
-    private T key;
-
-    public Generic(T key) {
-        this.key = key;
-    }
-
-    public T getKey(){
-        return key;
-    }
-}
-```
-
-如何实例化泛型类：
-
-```java
-Generic<Integer> genericInteger = new Generic<Integer>(123456);
-```
-
-**2、泛型接口**
-
-```java
-public interface Generator<T> {
-    public T method();
-}
-```
-
-实现泛型接口，不指定类型：
-
-```java
-class GeneratorImpl<T> implements Generator<T>{
-    @Override
-    public T method() {
-        return null;
-    }
-}
-```
-
-实现泛型接口，指定类型：
-
-```java
-class GeneratorImpl<T> implements Generator<String>{
-    @Override
-    public String method() {
-        return "hello";
-    }
-}
-```
-
-**3、泛型方法** ：
-
-```java
-   public static < E > void printArray( E[] inputArray )
-   {
-         for ( E element : inputArray ){
-            System.out.printf( "%s ", element );
-         }
-         System.out.println();
+    /**
+     * 弱引用
+     */
+    public static void softReference() {
+        Object o = new Object();
+        SoftReference<Object> objectSoftReference = new SoftReference<>(o);
+        System.out.println("softReference before=====>" + objectSoftReference.get());
+        o = null;
+        try {
+            byte[] bytes = new byte[6 * 1024 * 1024];
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        } finally {
+            System.out.println("softReference before=====>" + objectSoftReference.get());
+        }
     }
 ```
 
-使用泛型方法：
+![image-20230221230518537](https://gitee.com/studentgitee/note-picture/raw/master/image-20230221230518537.png)
+
+### 弱引用
+
+> 弱引用也是用来描述非必需对象的，当JVM进行垃圾回收时，无论内存是否充足，都会回收被弱引用关联的对象。在java中，用`java.lang.ref.WeakReference`类来表示
 
 ```java
-// 创建不同类型数组： Integer, Double 和 Character
-Integer[] intArray = { 1, 2, 3 };
-String[] stringArray = { "Hello", "World" };
-printArray( intArray  );
-printArray( stringArray  );
-```
-
-> 注意: `public static < E > void printArray( E[] inputArray )` 一般被称为静态泛型方法;在 java 中泛型只是一个占位符，必须在传递类型后才能使用。类在实例化时才能真正的传递类型参数，由于静态方法的加载先于类的实例化，也就是说类中的泛型还没有传递真正的类型参数，静态的方法的加载就已经完成了，所以静态泛型方法是没有办法使用类上声明的泛型的。只能使用自己声明的 `<E>`
-
-### 追问2：泛型应用场景
-
-- 自定义接口通用返回结果 `CommonResult<T>` 通过参数 `T` 可根据具体的返回类型动态指定结果的数据类型
-
-### 追问3：什么是泛型的类型擦除
-
-ArrayList<String>和ArrayList<Integer>在编译时是不同的类型，但是在编译完成后都被编译器简化成了ArrayList，这一现象，被称为泛型的类型擦除(Type Erasure)。泛型的本质是参数化类型，而类型擦除使得类型参数只存在于编译期，在运行时，jvm是并不知道泛型的存在的。
-
-### 追问4：为什么要进行泛型类型擦除
-
-> 类型擦除的主要目的是避免过多的创建类而造成的运行时的过度消耗
-
-类型擦除分为两种：
-
-1、无限制类型擦除
-
-当类定义中的类型参数没有任何限制时，在类型擦除后，会被直接替换为Object。在下面的例子中，<T>中的类型参数T就全被替换为了Object(左侧为编译前的代码，右侧为通过字节码文件反编译得到的代码)：
-
-![image-20220703122345900](https://gitee.com/studentgitee/note-picture/raw/master/image-20220703122345900.png)
-
-2、有限制类型擦除
-
-当类定义中的类型参数存在限制时，在类型擦除中替换为类型参数的上界或者下界。下面的代码中，经过擦除后T被替换成了Integer：
-
-![image-20220703122428664](https://gitee.com/studentgitee/note-picture/raw/master/image-20220703122428664.png)
-
-## 何为反射
-
-> 反射之所以被称为框架的灵魂，主要是因为它赋予了我们在运行时分析类以及执行类中方法的能力。通过反射你可以获取任意一个类的所有属性和方法。
-
-### 反射的应用场景
-
-日常使用的 Spring中使用很多的反射机制，为什么你使用 Spring 的时候 ，一个`@Component`注解就声明了一个类为 Spring Bean 呢？为什么你通过一个 `@Value`注解就读取到配置文件中的值呢？究竟是怎么起作用的呢？这些都是因为你可以基于反射分析类，然后获取到类/属性/方法/方法的参数上的注解。你获取到注解之后，就可以做进一步的处理。
-
-### 获取java类字节码的方法
-
-1、Class.class
-
-2、object.getClass()
-
-3、Class.forName("")
-
-- **JDBC 的数据库的连接**
-
-在JDBC 的操作中，如果要想进行数据库的连接，则必须按照以上的几步完成
-
-1. 通过Class.forName()加载数据库的驱动程序 （通过反射加载，前提是引入相关了Jar包）
-2. 通过 DriverManager 类进行数据库的连接，连接的时候要输入数据库的连接地址、用户名、密码
-3. 通过Connection 接口接收连接
-
-```
-public class ConnectionJDBC {  
-  
-    /** 
-     * @param args 
-     */  
-    //驱动程序就是之前在classpath中配置的JDBC的驱动程序的JAR 包中  
-    public static final String DBDRIVER = "com.mysql.jdbc.Driver";  
-    //连接地址是由各个数据库生产商单独提供的，所以需要单独记住  
-    public static final String DBURL = "jdbc:mysql://localhost:3306/test";  
-    //连接数据库的用户名  
-    public static final String DBUSER = "root";  
-    //连接数据库的密码  
-    public static final String DBPASS = "";  
-      
-      
-    public static void main(String[] args) throws Exception {  
-        Connection con = null; //表示数据库的连接对象  
-        Class.forName(DBDRIVER); //1、使用CLASS 类加载驱动程序 ,反射机制的体现 
-        con = DriverManager.getConnection(DBURL,DBUSER,DBPASS); //2、连接数据库  
-        System.out.println(con);  
-        con.close(); // 3、关闭数据库  
-    }  
-```
-
-## java线程池
-
-⚠️注意 ：线程池不允许使用Executors去创建，而是通过ThreadPoolExecutor的方式，这样的处理方式让写的同学
-
-更加明确线程池的运行规则，规避资源耗尽的风险。`摘自阿里编码规约`。 说明：Executors各个方法的弊端：
-
-1）newFixedThreadPool和newSingleThreadExecutor:
-  主要问题是堆积的请求处理队列可能会耗费非常大的内存，甚至OOM。
-2）newCachedThreadPool和newScheduledThreadPool:
-  主要问题是线程数最大数是Integer.MAX_VALUE，可能会创建数量非常多的线程，甚至OOM。
-
-```java
-public ThreadPoolExecutor(    int corePoolSize,
-                              int maximumPoolSize,
-                              long keepAliveTime,
-                              TimeUnit unit,
-                              BlockingQueue<Runnable> workQueue,
-                              RejectedExecutionHandler handler) {
-        this(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue,
-             Executors.defaultThreadFactory(), handler);
+  /**
+     * 弱引用
+     */
+    public static void weakReference(){
+        Object o = new Object();
+        WeakReference<Object> objectWeakReference = new WeakReference<>(o);
+        o=null;
+        System.out.println("weakReference before=====>" + objectWeakReference.get());
+        System.gc();
+        System.out.println("weakReference after=====>" + objectWeakReference.get());
     }
 ```
 
-**corePoolSize & maximumPoolSize**
+![image-20230221231113833](https://gitee.com/studentgitee/note-picture/raw/master/image-20230221231113833.png)
 
-核心线程数（corePoolSize）和最大线程数（maximumPoolSize）是线程池中非常重要的两个概念。
+### 虚引用
 
-1、当一个新任务被提交到池中，如果当前运行线程小于核心线程数（corePoolSize），即使当前有空闲线程，也会新建一个线程来处理新提交的任务；
+> 虚引用和前面的软引用、弱引用不同，它并不影响对象的生命周期。在java中用`java.lang.ref.PhantomReference`类表示。如果一个对象与虚引用关联，则跟没有引用与之关联一样，在任何时候都可能被垃圾回收器回收。虚引用主要用来跟踪对象被垃圾回收的活动。
 
-2、如果当前运行线程数大于核心线程数（corePoolSize）并小于最大线程数（maximumPoolSize），只有当等待队列已满的情况下才会新建线程。
-
-**keepAliveTime & unit**
-
-keepAliveTime 为超过 corePoolSize 线程数量的线程最大空闲时间，unit 为时间单位。
-
-**等待队列（workQueue）**
-
-任何阻塞队列（BlockingQueue）都可以用来转移或保存提交的任务，线程池大小和阻塞队列相互约束线程池：
-
-1、如果运行线程数小于`corePoolSize`，提交新任务时就会新建一个线程来运行；
-
-2、如果运行线程数大于或等于`corePoolSize`，新提交的任务就会入列等待；如果队列已满，并且运行线程数小于`maximumPoolSize`，也将会新建一个线程来运行；
-
-3、如果线程数大于`maximumPoolSize`，新提交的任务将会根据**拒绝策略**来处理。
-
-下面来看一下三种通用的入队策略：
-
-1、**直接传递**：通过 SynchronousQueue 直接把任务传递给线程。如果当前没可用线程，尝试入队操作会失败，然后再创建一个新的线程。当处理可能具有内部依赖性的请求时，该策略会避免请求被锁定。直接传递通常需要无界的最大线程数（maximumPoolSize），避免拒绝新提交的任务。当任务持续到达的平均速度超过可处理的速度时，可能导致线程的无限增长。
-
-2、**无界队列**：使用无界队列（如 LinkedBlockingQueue）作为等待队列，当所有的核心线程都在处理任务时， 新提交的任务都会进入队列等待。因此，不会有大于 corePoolSize 的线程会被创建（maximumPoolSize 也将失去作用）。这种策略适合每个任务都完全独立于其他任务的情况；例如网站服务器。这种类型的等待队列可以使瞬间爆发的高频请求变得平滑。当任务持续到达的平均速度超过可处理速度时，可能导致等待队列无限增长。
-
-3、**有界队列**：当使用有限的最大线程数时，有界队列（如 ArrayBlockingQueue）可以防止资源耗尽，但是难以调整和控制。队列大小和线程池大小可以相互作用：使用大的队列和小的线程数可以减少CPU使用率、系统资源和上下文切换的开销，但是会导致吞吐量变低，如果任务频繁地阻塞（例如被I/O限制），系统就能为更多的线程调度执行时间。使用小的队列通常需要更多的线程数，这样可以最大化CPU使用率，但可能会需要更大的调度开销，从而降低吞吐量。
-
-**拒绝策略**
-
-当线程池已经关闭或达到饱和（最大线程和队列都已满）状态时，新提交的任务将会被拒绝。 ThreadPoolExecutor 定义了四种拒绝策略：
-
-1、**AbortPolicy**：默认策略，在需要拒绝任务时抛出RejectedExecutionException；
-
-2、**CallerRunsPolicy**：直接在 execute 方法的调用线程中运行被拒绝的任务，如果线程池已经关闭，任务将被丢弃；
-
-3、**DiscardPolicy**：直接丢弃任务；
-
-4、**DiscardOldestPolicy**：丢弃队列中等待时间最长的任务，并执行当前提交的任务，如果线程池已经关闭，任务将被丢弃。
-
-我们也可以自定义拒绝策略，只需要实现 RejectedExecutionHandler； 需要注意的是，拒绝策略的运行需要指定线程池和队列的容量。
-
-## java注解
-
-> Java注解又称Java标注，是在 JDK5 时引入的新特性，注解（也被称为元数据）。
-
-Java注解分类
-
-1. 标准注解，包括@Override、@Deprecated、@SuppressWarnings等，使用这些注解后编译器就会进行检查。
-2. 元注解，注解是用于定义注解的注解，包括@Retention、@Target、@Inherited、@Documented、@Repeatable 等。元注解也是Java自带的标准注解，只不过用于修饰注解，比较特殊。
-3. 自定义注解，用户可以根据自己的需求定义注解。
-
-**标准注解**
-
-|       注解名称       |                           功能描述                           |
-| :------------------: | :----------------------------------------------------------: |
-|      @Override       | 检查该方法是否是重写方法，如果发现其父类，或者是引用的接口中并没有该方法时，会报编译错误 |
-|     @Deprecated      |          标记过时方法，如果使用该方法，会报编译警告          |
-|  @SuppressWarnings   |              指示编译器去忽略注释解中声明的警告              |
-| @Functionallnterface |           java8支持，标识一个匿名函数或函数式接口            |
-
-**元注解**
-
-@Retention用来定义该注解在哪一个级别可用，在源代码中(SOURCE)、类文件中(CLASS)或者运行时(RUNTIME)
+> 虚引用可以和一个引用队列（ReferenceQueue）联合使用，如果虚引用所引用的对象被垃圾回收，Java虚拟机就会把这个虚引用加入到与之关联的引用队列中。通过queue的poll方法取出
 
 ```java
-@Documented@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.ANNOTATION_TYPE)
-public @interface Retention {
-  RetentionPolicy value();
-}
-public enum RetentionPolicy {
-  //此注解类型的信息只会记录在源文件中，编译时将被编译器丢弃，也就是说
-  //不会保存在编译好的类信息中
-  SOURCE,
-  //编译器将注解记录在类文件中，但不会加载到JVM中。如果一个注解声明没指定范围，则系统
-  //默认值就是Class
-  CLASS,
-  //注解信息会保留在源文件、类文件中，在执行的时也加载到Java的JVM中，因此可以反射性的读取。
-  RUNTIME
-}
+		/**
+     * 虚引用
+     */
+    public static void phantomReference(){
+        Object o = new Object();
+        ReferenceQueue<Object> queue = new ReferenceQueue<Object>();
+        PhantomReference<Object> objectPhantomReference = new PhantomReference<>(o,queue);
+        o=null;
+        System.out.println("phantomReference before=====>" + objectPhantomReference.get());
+        System.gc();
+        System.out.println("phantomReference after=====>" + objectPhantomReference.get());
+        System.out.println(queue.poll());
+    }
 ```
 
-@Documented 生成文档信息的时候保留注解，对类作辅助说明
+![image-20230221231750942](https://gitee.com/studentgitee/note-picture/raw/master/image-20230221231750942.png)
 
-```java
-@Documented
-@Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.ANNOTATION_TYPE})
-public @interface Documented {
-}
-```
+**使用场景**
 
-@Target：用于描述注解的使用范围（即：被描述的注解可以用在什么地方）
+有N多个任务被线程执行，有正常执行完的，也有发生异常的，那么发生异常的任务会产生异常信息，问系统中如何管理这些异常信息？如果异常任务被垃圾回收了，那么如何处理掉它所对应的异常信息
 
-```java
-@Documented
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.ANNOTATION_TYPE)
-public @interface Target {
-    ElementType[] value();
-}
-```
+# Java集合
 
-|   Target类型    |                作用                |
-| :-------------: | :--------------------------------: |
-|      TYPE       | 应用于类、接口(包括注解类型)、枚举 |
-|      FIELD      |          应用于字段或属性          |
-|    PARAMETER    |          应用于方法的参数          |
-|     METHOD      |             应用于方法             |
-|   CONSTRUCTOR   |           应用于构造函数           |
-| LOCAL_VARIABLE  |           应用于局部变量           |
-| ANNOTATION_TYPE |         应用于一个注解类型         |
-|     PACKAGE     |              应用于包              |
-| TYPE_PARAMETER  |           应用于类型变量           |
-|    TYPE_USE     |     应用于任何使用类型的语句中     |
-|     MODULE      |                                    |
+## ArrayList
 
-
-
-![](java集合面试题.assets/java-collection-hierarchy.77b66a51.png)
-
-
-
-## ArrayList 扩容机制
+### ArrayList 扩容机制
 
 先从 ArrayList 的构造函数说起
 
@@ -806,12 +576,12 @@ private void grow(int minCapacity) {
 
 **这里补充一点比较重要，但是容易被忽视掉的知识点：**
 
-- java 中的 `length`属性是针对数组说的,比如说你声明了一个数组,想知道这个数组的长度则用到了 length 这个属性.
-- java 中的 `length()` 方法是针对字符串说的,如果想看这个字符串的长度则用到 `length()` 这个方法.
+- java 中的 `length`属性是针对数组说的,比如说你声明了一个数组,想知道这个数组的长度则用到了 length 这个属性
+- java 中的 `length()` 方法是针对字符串说的,如果想看这个字符串的长度则用到 `length()` 这个方法
 - java 中的 `size()` 方法是针对泛型集合说的,如果想看这个泛型有多少个元素,就调用此方法来查看
 - 以此类推······
 
-## ArrayList 与 LinkedList 区别
+### ArrayList 与 LinkedList 区别
 
 1. **是否保证线程安全：** `ArrayList` 和 `LinkedList` 都是不同步的，也就是不保证线程安全；
 
@@ -829,7 +599,9 @@ private void grow(int minCapacity) {
 
 另外，不要下意识地认为 `LinkedList` 作为链表就最适合元素增删的场景。我在上面也说了，`LinkedList` 仅仅在头尾插入或者删除元素的时候时间复杂度近似 O(1)，其他情况增删元素的时间复杂度都是 O(n) 。
 
-## HashMap的底层实现
+## HashMap
+
+### HashMap的底层实现
 
 JDK1.8 之前
 
@@ -878,7 +650,7 @@ static int hash(int h) {
 
 > TreeMap、TreeSet 以及 JDK1.8 之后的 HashMap 底层都用到了红黑树。红黑树就是为了解决二叉查找树的缺陷，因为二叉查找树在某些情况下会退化成一个线性结构。
 
-## HashMap的put方法
+### put方法
 
 ![hashmap-put](https://gitee.com/studentgitee/note-picture/raw/master/hashmap-put.png)
 
@@ -902,7 +674,7 @@ static int hash(int h) {
 
 10、最后，回到那个被记住的被碰撞节点，如果它不为空，默认情况下，新节点的值将会替换被碰撞节点的值，同时返回被碰撞节点的值（V）。
 
-## HashMap源码中在计算hash值的时候为什么要右移16位
+### HashMap源码中在计算hash值的时候为什么要右移16位
 
 > 尽量扰动计算的出来的hash值，减少哈希冲突。
 
@@ -936,7 +708,7 @@ public class Hash {
 |   >>   |     按位右移运算符。左操作数按位右移右操作数指定的位数。     |      A >> 2得到15即 1111       |
 |  >>>   | 按位右移补零操作符。左操作数的值按右操作数指定的位数右移，移动得到的空位以零填充。 |     A>>>2得到15即0000 1111     |
 
-## HashMap扩容的时候为什么是2的n次幂
+### HashMap扩容的时候为什么是2的n次幂
 
 为了能让 HashMap 存取高效，尽量较少碰撞，也就是要尽量把数据分配均匀。我们上面也讲到了过了，Hash 值的范围值-2147483648 到 2147483647，前后加起来大概 40 亿的映射空间，只要哈希函数映射得比较均匀松散，一般应用是很难出现碰撞的。但问题是一个 40 亿长度的数组，内存是放不下的。所以这个散列值是不能直接拿来用的。用之前还要先做对数组的长度取模运算，得到的余数才能用来要存放的位置也就是对应的数组下标。这个数组下标的计算方法是“ `(n - 1) & hash`”。（n 代表数组长度）。这也就解释了 HashMap 的长度为什么是 2 的幂次方。
 
@@ -944,7 +716,7 @@ public class Hash {
 
 我们首先可能会想到采用%取余的操作来实现。但是，重点来了：**“取余(%)操作中如果除数是 2 的幂次则等价于与其除数减一的与(&)操作（也就是说 hash%length==hash&(length-1)的前提是 length 是 2 的 n 次方；）。”** 并且 **采用二进制位操作 &，相对于%能够提高运算效率，这就解释了 HashMap 的长度为什么是 2 的幂次方。**
 
-## HashMap线程不安全的原因
+### HashMap线程不安全的原因
 
 jdk1.8的hashMap
 
@@ -1011,7 +783,7 @@ final V putVal(int hash, K key, V value, boolean onlyIfAbsent,
 
 假设一种情况，线程A进入后还未进行数据插入时挂起，而线程B正常执行，从而正常插入数据，然后线程A获取CPU时间片，此时线程A不用再进行hash判断了，问题出现：线程A会把线程B插入的数据给覆盖，发生线程不安全。
 
-## HashMap 和 Hashtable 的区别
+### HashMap 和 Hashtable 的区别
 
 1. **线程是否安全：** `HashMap` 是非线程安全的，`Hashtable` 是线程安全的,因为 `Hashtable` 内部的方法基本都经过`synchronized` 修饰。（如果你要保证线程安全的话就使用 `ConcurrentHashMap` 吧！）；
 2. **效率：** 因为线程安全的问题，`HashMap` 要比 `Hashtable` 效率高一点。另外，`Hashtable` 基本被淘汰，不要在代码中使用它；
@@ -1019,7 +791,7 @@ final V putVal(int hash, K key, V value, boolean onlyIfAbsent,
 4. **初始容量大小和每次扩充容量大小的不同 ：** ① 创建时如果不指定容量初始值，`Hashtable` 默认的初始大小为 11，之后每次扩充，容量变为原来的 2n+1。`HashMap` 默认的初始化大小为 16。之后每次扩充，容量变为原来的 2 倍。② 创建时如果给定了容量初始值，那么 Hashtable 会直接使用你给定的大小，而 `HashMap` 会将其扩充为 2 的幂次方大小（`HashMap` 中的`tableSizeFor()`方法保证，下面给出了源代码）。也就是说 `HashMap` 总是使用 2 的幂作为哈希表的大小,后面会介绍到为什么是 2 的幂次方。
 5. **底层数据结构：** JDK1.8 以后的 `HashMap` 在解决哈希冲突时有了较大的变化，当链表长度大于阈值（默认为 8）（将链表转换成红黑树前会判断，如果当前数组的长度小于 64，那么会选择先进行数组扩容，而不是转换为红黑树）时，将链表转化为红黑树，以减少搜索时间。Hashtable 没有这样的机制。
 
-## HashMap和TreeMap的区别
+### HashMap和TreeMap的区别
 
 1、`TreeMap` 和`HashMap` 都继承自`AbstractMap` ，但是需要注意的是`TreeMap`它还实现了`NavigableMap`接口和`SortedMap` 接口。
 
@@ -1029,4 +801,384 @@ final V putVal(int hash, K key, V value, boolean onlyIfAbsent,
 
 3、HashMap是通过hash值进行快速查找的；HashMap中的元素是没有顺序的；TreeMap中
 所有的元素都是有某一固定顺序的，如果需要得到一个有序的结果，就应该使用TreeMap；
+
+
+
+# Java中的异常体系
+
+Java中的异常主要分为Error和Exception。
+
+![image-20230212115226826](https://gitee.com/studentgitee/note-picture/raw/master/image-20230212115226826.png)
+
+> **Error** 指Java程序运行错误，如果程序在启动时出现Error，则启动失败；如果程序运行过程中出现Error，则系统将退出程序。出现Error是系统的内部错误或资源耗尽，Error不能在程序运行过程中被动态处理，一旦出现Error，系统能做的只有记录错误的原因和安全终止。
+
+> Exception 指 Java程序运行异常，在运行中的程序发生了程序员不期望发生的事情，可以被Java异常处理机制处理。Exception也是程序开发中异常处理的核心，可分为RuntimeException（运行时异常）和CheckedException（检查异常）
+
+1、`RuntimeException`（运行时异常）：指在Java虚拟机正常运行期间抛出的异常RuntimeException可以被捕获并处理，如果出现此情况，我们需要抛出异常或者捕获并处理异常。常见的有：`NullPointerException`（空指针错误）、`ClassCastException`（类型转换错误）、`ArrayIndexOutOfBoundsException`（数组越界错误）等;
+
+2、`CheckedException`（检查异常）：指在编译阶段Java编译器检查CheckedException异常，并强制程序捕获和处理此类异常，要求程序在可能出现异常的地方通过try catch语句块捕获异常并处理异常，如果不处理，则编译不通过。常见的有由于I/O错误导致的`IOException`、`SQLException`、`ClassNotFoundException`等。该类异常通常由于打开错误的文件、SQL语法错误、类不存等引起。
+
+## 异常的处理方式
+
+回答：异常处理方式有抛出异常和使用try catch语句块捕获异常两种方式。
+
+1、抛出异常：遇到异常时不进行具体的处理，直接将异常抛给调用者，让调用者自己根据情况处理。抛出异常的三种形式：throws、throw和系统自动抛出异常。其中throws作用在方法上，用于定义方法可能抛出的异常；throw作用在方法内，表示明确抛出一个异常。
+
+2、使用try catch捕获并处理异常：使用try catch 捕获异常能够有针对性的处理每种可能出现的异常，并在捕获到异常后根据不同的情况做不同的处理。其使用过程比较简单：用try catch语句块将可能出现异常的代码抱起来即可。
+
+##  try-catch-finally 如何使用
+
+- `try`块 ： 用于捕获异常。其后可接零个或多个 `catch` 块，如果没有 `catch` 块，则必须跟一个 `finally` 块。
+- `catch`块 ： 用于处理 try 捕获到的异常。
+- `finally` 块 ： 无论是否捕获或处理异常，`finally` 块里的语句都会被执行。当在 `try` 块或 `catch` 块中遇到 `return` 语句时，`finally` 语句块将在方法返回之前被执行。
+
+```java
+try {
+    System.out.println("Try to do something");
+    throw new RuntimeException("RuntimeException");
+} catch (Exception e) {
+    System.out.println("Catch Exception -> " + e.getMessage());
+} finally {
+    System.out.println("Finally");
+}
+```
+
+**⚠️注意：不要在 finally 语句块中使用 return!** 当 try 语句和 finally 语句中都有 return 语句时，try 语句块中的 return 语句会被忽略。这是因为 try 语句中的 return 返回值会先被暂存在一个本地变量中，当执行到 finally 语句中的 return 之后，这个本地变量的值就变为了 finally 语句中的 return 返回值。
+
+## finally 中的代码一定会执行吗？
+
+不一定的！在某些情况下，finally 中的代码不会被执行。
+
+就比如说 finally 之前虚拟机被终止运行的话，finally 中的代码就不会被执行。
+
+```java
+try {
+    System.out.println("Try to do something");
+    throw new RuntimeException("RuntimeException");
+} catch (Exception e) {
+    System.out.println("Catch Exception -> " + e.getMessage());
+    // 终止当前正在运行的Java虚拟机
+    System.exit(1);
+} finally {
+    System.out.println("Finally");
+}
+```
+
+另外，在以下 2 种特殊情况下，`finally` 块的代码也不会被执行：
+
+1. 程序所在的线程死亡。
+2. 关闭 CPU。
+
+# Java泛型
+
+## 什么是泛型？有什么作用？
+
+**Java 泛型（Generics）** 是 JDK 5 中引入的一个新特性。使用泛型参数，可以增强代码的可读性以及稳定性。
+
+编译器可以对泛型参数进行检测，并且通过泛型参数可以指定传入的对象类型。比如 `ArrayList<Persion> persons = new ArrayList<Persion>()` 这行代码就指明了该 `ArrayList` 对象只能传入 `Persion` 对象，如果传入其他类型的对象就会报错.
+
+## 泛型的使用方式有哪几种
+
+泛型一般有三种使用方式:**泛型类**、**泛型接口**、**泛型方法**。
+
+**1、泛型类**
+
+```java
+//此处T可以随便写为任意标识，常见的如T、E、K、V等形式的参数常用于表示泛型
+//在实例化泛型类时，必须指定T的具体类型
+public class Generic<T>{
+
+    private T key;
+
+    public Generic(T key) {
+        this.key = key;
+    }
+
+    public T getKey(){
+        return key;
+    }
+}
+```
+
+如何实例化泛型类：
+
+```java
+Generic<Integer> genericInteger = new Generic<Integer>(123456);
+```
+
+**2、泛型接口**
+
+```java
+public interface Generator<T> {
+    public T method();
+}
+```
+
+实现泛型接口，不指定类型：
+
+```java
+class GeneratorImpl<T> implements Generator<T>{
+    @Override
+    public T method() {
+        return null;
+    }
+}
+```
+
+实现泛型接口，指定类型：
+
+```java
+class GeneratorImpl<T> implements Generator<String>{
+    @Override
+    public String method() {
+        return "hello";
+    }
+}
+```
+
+**3、泛型方法** ：
+
+```java
+   public static < E > void printArray( E[] inputArray )
+   {
+         for ( E element : inputArray ){
+            System.out.printf( "%s ", element );
+         }
+         System.out.println();
+    }
+```
+
+使用泛型方法：
+
+```java
+// 创建不同类型数组： Integer, Double 和 Character
+Integer[] intArray = { 1, 2, 3 };
+String[] stringArray = { "Hello", "World" };
+printArray( intArray  );
+printArray( stringArray  );
+```
+
+> 注意: `public static < E > void printArray( E[] inputArray )` 一般被称为静态泛型方法;在 java 中泛型只是一个占位符，必须在传递类型后才能使用。类在实例化时才能真正的传递类型参数，由于静态方法的加载先于类的实例化，也就是说类中的泛型还没有传递真正的类型参数，静态的方法的加载就已经完成了，所以静态泛型方法是没有办法使用类上声明的泛型的。只能使用自己声明的 `<E>`
+
+## 泛型应用场景
+
+- 自定义接口通用返回结果 `CommonResult<T>` 通过参数 `T` 可根据具体的返回类型动态指定结果的数据类型
+
+## 什么是泛型的类型擦除
+
+ArrayList<String>和ArrayList<Integer>在编译时是不同的类型，但是在编译完成后都被编译器简化成了ArrayList，这一现象，被称为泛型的类型擦除(Type Erasure)。泛型的本质是参数化类型，而类型擦除使得类型参数只存在于编译期，在运行时，jvm是并不知道泛型的存在的。
+
+## 为什么要进行泛型类型擦除
+
+> 类型擦除的主要目的是避免过多的创建类而造成的运行时的过度消耗
+
+类型擦除分为两种：
+
+1、无限制类型擦除
+
+当类定义中的类型参数没有任何限制时，在类型擦除后，会被直接替换为Object。在下面的例子中，<T>中的类型参数T就全被替换为了Object(左侧为编译前的代码，右侧为通过字节码文件反编译得到的代码)：
+
+![image-20220703122345900](https://gitee.com/studentgitee/note-picture/raw/master/image-20220703122345900.png)
+
+2、有限制类型擦除
+
+当类定义中的类型参数存在限制时，在类型擦除中替换为类型参数的上界或者下界。下面的代码中，经过擦除后T被替换成了Integer：
+
+![image-20220703122428664](https://gitee.com/studentgitee/note-picture/raw/master/image-20220703122428664.png)
+
+# 反射
+
+> 反射之所以被称为框架的灵魂，主要是因为它赋予了我们在运行时分析类以及执行类中方法的能力。通过反射你可以获取任意一个类的所有属性和方法。
+
+## 反射的应用场景
+
+日常使用的 Spring中使用很多的反射机制，为什么你使用 Spring 的时候 ，一个`@Component`注解就声明了一个类为 Spring Bean 呢？为什么你通过一个 `@Value`注解就读取到配置文件中的值呢？究竟是怎么起作用的呢？这些都是因为你可以基于反射分析类，然后获取到类/属性/方法/方法的参数上的注解。你获取到注解之后，就可以做进一步的处理。
+
+## 获取java类字节码的方法
+
+```java
+1、Class.class
+
+2、object.getClass()
+
+3、Class.forName("")
+```
+
+- **JDBC 的数据库的连接**
+
+在JDBC 的操作中，如果要想进行数据库的连接，则必须按照以上的几步完成
+
+1. 通过Class.forName()加载数据库的驱动程序 （通过反射加载，前提是引入相关了Jar包）
+2. 通过 DriverManager 类进行数据库的连接，连接的时候要输入数据库的连接地址、用户名、密码
+3. 通过Connection 接口接收连接
+
+```
+public class ConnectionJDBC {  
+  
+    /** 
+     * @param args 
+     */  
+    //驱动程序就是之前在classpath中配置的JDBC的驱动程序的JAR 包中  
+    public static final String DBDRIVER = "com.mysql.jdbc.Driver";  
+    //连接地址是由各个数据库生产商单独提供的，所以需要单独记住  
+    public static final String DBURL = "jdbc:mysql://localhost:3306/test";  
+    //连接数据库的用户名  
+    public static final String DBUSER = "root";  
+    //连接数据库的密码  
+    public static final String DBPASS = "";  
+      
+      
+    public static void main(String[] args) throws Exception {  
+        Connection con = null; //表示数据库的连接对象  
+        Class.forName(DBDRIVER); //1、使用CLASS 类加载驱动程序 ,反射机制的体现 
+        con = DriverManager.getConnection(DBURL,DBUSER,DBPASS); //2、连接数据库  
+        System.out.println(con);  
+        con.close(); // 3、关闭数据库  
+    }  
+```
+
+# Java线程池
+
+⚠️注意 ：线程池不允许使用Executors去创建，而是通过ThreadPoolExecutor的方式，这样的处理方式让写的同学
+
+更加明确线程池的运行规则，规避资源耗尽的风险。`摘自阿里编码规约`。 说明：Executors各个方法的弊端：
+
+1）newFixedThreadPool和newSingleThreadExecutor:主要问题是堆积的请求处理队列可能会耗费非常大的内存，甚至OOM。
+2）newCachedThreadPool和newScheduledThreadPool:主要问题是线程数最大数是Integer.MAX_VALUE，可能会创建数量非常多的线程，甚至OOM。
+
+```java
+public ThreadPoolExecutor(    int corePoolSize,
+                              int maximumPoolSize,
+                              long keepAliveTime,
+                              TimeUnit unit,
+                              BlockingQueue<Runnable> workQueue,
+                              RejectedExecutionHandler handler) {
+        this(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue,
+             Executors.defaultThreadFactory(), handler);
+    }
+```
+
+**corePoolSize & maximumPoolSize**
+
+核心线程数（corePoolSize）和最大线程数（maximumPoolSize）是线程池中非常重要的两个概念。
+
+1、当一个新任务被提交到池中，如果当前运行线程小于核心线程数（corePoolSize），即使当前有空闲线程，也会新建一个线程来处理新提交的任务；
+
+2、如果当前运行线程数大于核心线程数（corePoolSize）并小于最大线程数（maximumPoolSize），只有当等待队列已满的情况下才会新建线程。
+
+**keepAliveTime & unit**
+
+keepAliveTime 为超过 corePoolSize 线程数量的线程最大空闲时间，unit 为时间单位。
+
+**等待队列（workQueue）**
+
+任何阻塞队列（BlockingQueue）都可以用来转移或保存提交的任务，线程池大小和阻塞队列相互约束线程池：
+
+1、如果运行线程数小于`corePoolSize`，提交新任务时就会新建一个线程来运行；
+
+2、如果运行线程数大于或等于`corePoolSize`，新提交的任务就会入列等待；如果队列已满，并且运行线程数小于`maximumPoolSize`，也将会新建一个线程来运行；
+
+3、如果线程数大于`maximumPoolSize`，新提交的任务将会根据**拒绝策略**来处理。
+
+下面来看一下三种通用的入队策略：
+
+1、**直接传递**：通过 SynchronousQueue 直接把任务传递给线程。如果当前没可用线程，尝试入队操作会失败，然后再创建一个新的线程。当处理可能具有内部依赖性的请求时，该策略会避免请求被锁定。直接传递通常需要无界的最大线程数（maximumPoolSize），避免拒绝新提交的任务。当任务持续到达的平均速度超过可处理的速度时，可能导致线程的无限增长。
+
+2、**无界队列**：使用无界队列（如 LinkedBlockingQueue）作为等待队列，当所有的核心线程都在处理任务时， 新提交的任务都会进入队列等待。因此，不会有大于 corePoolSize 的线程会被创建（maximumPoolSize 也将失去作用）。这种策略适合每个任务都完全独立于其他任务的情况；例如网站服务器。这种类型的等待队列可以使瞬间爆发的高频请求变得平滑。当任务持续到达的平均速度超过可处理速度时，可能导致等待队列无限增长。
+
+3、**有界队列**：当使用有限的最大线程数时，有界队列（如 ArrayBlockingQueue）可以防止资源耗尽，但是难以调整和控制。队列大小和线程池大小可以相互作用：使用大的队列和小的线程数可以减少CPU使用率、系统资源和上下文切换的开销，但是会导致吞吐量变低，如果任务频繁地阻塞（例如被I/O限制），系统就能为更多的线程调度执行时间。使用小的队列通常需要更多的线程数，这样可以最大化CPU使用率，但可能会需要更大的调度开销，从而降低吞吐量。
+
+**拒绝策略**
+
+当线程池已经关闭或达到饱和（最大线程和队列都已满）状态时，新提交的任务将会被拒绝。 ThreadPoolExecutor 定义了四种拒绝策略：
+
+1、**AbortPolicy**：默认策略，在需要拒绝任务时抛出RejectedExecutionException；
+
+2、**CallerRunsPolicy**：直接在 execute 方法的调用线程中运行被拒绝的任务，如果线程池已经关闭，任务将被丢弃；
+
+3、**DiscardPolicy**：直接丢弃任务；
+
+4、**DiscardOldestPolicy**：丢弃队列中等待时间最长的任务，并执行当前提交的任务，如果线程池已经关闭，任务将被丢弃。
+
+我们也可以自定义拒绝策略，只需要实现 RejectedExecutionHandler； 需要注意的是，拒绝策略的运行需要指定线程池和队列的容量。
+
+# Java注解
+
+> Java注解又称Java标注，是在 JDK5 时引入的新特性，注解（也被称为元数据）。
+
+## 注解分类
+
+| Java注解分类 | 描述                                                         |
+| :----------: | ------------------------------------------------------------ |
+|   标准注解   | 包括@Override、@Deprecated、@SuppressWarnings等，使用这些注解后编译器就会进行检查 |
+|    元注解    | 注解是用于定义注解的注解，包括@Retention、@Target、@Inherited、@Documented、@Repeatable 等。<br />元注解也是Java自带的标准注解，只不过用于修饰注解，比较特殊 |
+|  自定义注解  | 用户可以根据自己的需求定义注解                               |
+
+### **标准注解**
+
+|       注解名称       |                           功能描述                           |
+| :------------------: | :----------------------------------------------------------: |
+|      @Override       | 检查该方法是否是重写方法，如果发现其父类，或者是引用的接口中并没有该方法时，会报编译错误 |
+|     @Deprecated      |          标记过时方法，如果使用该方法，会报编译警告          |
+|  @SuppressWarnings   |              指示编译器去忽略注释解中声明的警告              |
+| @Functionallnterface |           java8支持，标识一个匿名函数或函数式接口            |
+
+### **元注解**
+
+@Retention用来定义该注解在哪一个级别可用，在源代码中(SOURCE)、类文件中(CLASS)或者运行时(RUNTIME)
+
+```java
+@Documented@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.ANNOTATION_TYPE)
+public @interface Retention {
+  RetentionPolicy value();
+}
+public enum RetentionPolicy {
+  //此注解类型的信息只会记录在源文件中，编译时将被编译器丢弃，也就是说
+  //不会保存在编译好的类信息中
+  SOURCE,
+  //编译器将注解记录在类文件中，但不会加载到JVM中。如果一个注解声明没指定范围，则系统
+  //默认值就是Class
+  CLASS,
+  //注解信息会保留在源文件、类文件中，在执行的时也加载到Java的JVM中，因此可以反射性的读取。
+  RUNTIME
+}
+```
+
+@Documented 生成文档信息的时候保留注解，对类作辅助说明
+
+```java
+@Documented
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.ANNOTATION_TYPE})
+public @interface Documented {
+}
+```
+
+@Target：用于描述注解的使用范围（即：被描述的注解可以用在什么地方）
+
+```java
+@Documented
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.ANNOTATION_TYPE)
+public @interface Target {
+    ElementType[] value();
+}
+```
+
+|   Target类型    |                作用                |
+| :-------------: | :--------------------------------: |
+|      TYPE       | 应用于类、接口(包括注解类型)、枚举 |
+|      FIELD      |          应用于字段或属性          |
+|    PARAMETER    |          应用于方法的参数          |
+|     METHOD      |             应用于方法             |
+|   CONSTRUCTOR   |           应用于构造函数           |
+| LOCAL_VARIABLE  |           应用于局部变量           |
+| ANNOTATION_TYPE |         应用于一个注解类型         |
+|     PACKAGE     |              应用于包              |
+| TYPE_PARAMETER  |           应用于类型变量           |
+|    TYPE_USE     |     应用于任何使用类型的语句中     |
+|     MODULE      |                                    |
+
+
 
